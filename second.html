@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border: none;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 28px;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-fetch {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-fetch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-fetch:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-copy {
+            background-color: #6c757d;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-copy:hover {
+            background-color: #5a6268;
+        }
+
+        .user-profile {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .user-profile h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .user-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .user-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        @media (max-width: 768px) {
+            .card-header {
+                padding: 20px;
+            }
+
+            .card-header h2 {
+                font-size: 22px;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .user-info {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .user-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <div class="card">
+            <div class="card-header">
+                <h2>Random User Generator</h2>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 14px;">Fetch random user data from randomuser.me API</p>
+            </div>
+            <div class="card-body">
+                <!-- Alert Messages -->
+                <div id="alertBox"></div>
+
+                <!-- Form -->
+                <form id="userForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" name="gender">
+                                    <option value="">Any</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nationality" class="form-label">Nationality</label>
+                                <select class="form-select" id="nationality" name="nationality">
+                                    <option value="">Any</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="BR">Brazil</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="CH">Switzerland</option>
+                                    <option value="DE">Germany</option>
+                                    <option value="DK">Denmark</option>
+                                    <option value="ES">Spain</option>
+                                    <option value="FI">Finland</option>
+                                    <option value="FR">France</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="IE">Ireland</option>
+                                    <option value="IN">India</option>
+                                    <option value="IR">Iran</option>
+                                    <option value="MX">Mexico</option>
+                                    <option value="NL">Netherlands</option>
+                                    <option value="NO">Norway</option>
+                                    <option value="NZ">New Zealand</option>
+                                    <option value="RS">Serbia</option>
+                                    <option value="TR">Turkey</option>
+                                    <option value="UA">Ukraine</option>
+                                    <option value="US">United States</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="results" class="form-label">Number of Results</label>
+                                <input type="number" class="form-control" id="results" name="results" min="1" max="50" value="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="format" class="form-label">Format</label>
+                                <select class="form-select" id="format" name="format">
+                                    <option value="json">JSON</option>
+                                    <option value="pretty">Pretty Print</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-fetch">Generate Random User</button>
+                </form>
+
+                <!-- Loading Spinner -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 15px; color: #667eea; font-weight: 600;">Fetching user data...</p>
+                </div>
+
+                <!-- User Profile Display -->
+                <div id="userProfile" class="user-profile" style="display: none;">
+                    <h3>User Profile</h3>
+                    <img id="userImage" class="user-image" alt="User Avatar">
+                    
+                    <div class="user-info">
+                        <div class="info-item">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value" id="userName">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value" id="userEmail">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value" id="userPhone">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Location</div>
+                            <div class="info-value" id="userLocation">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Age</div>
+                            <div class="info-value" id="userAge">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Username</div>
+                            <div class="info-value" id="userUsername">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Nationality</div>
+                            <div class="info-value" id="userNationality">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Gender</div>
+                            <div class="info-value" id="userGender" style="text-transform: capitalize;">-</div>
+                        </div>
+                    </div>
+
+                    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <label class="form-label" style="margin: 0;">Raw Data (JSON)</label>
+                            <button type="button" class="btn-copy" onclick="copyToClipboard()">Copy</button>
+                        </div>
+                        <textarea id="rawData" class="form-control" rows="6" readonly style="font-size: 12px; font-family: 'Courier New', monospace;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const form = document.getElementById('userForm');
+        const alertBox = document.getElementById('alertBox');
+        const loading = document.getElementById('loading');
+        const userProfile = document.getElementById('userProfile');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await fetchRandomUser();
+        });
+
+        async function fetchRandomUser() {
+            // Reset UI
+            alertBox.innerHTML = '';
+            loading.style.display = 'block';
+            userProfile.style.display = 'none';
+
+            try {
+                // Build API URL with parameters
+                const gender = document.getElementById('gender').value;
+                const nationality = document.getElementById('nationality').value;
+                const results = document.getElementById('results').value;
+                const format = document.getElementById('format').value;
+
+                let url = 'https://randomuser.me/api/?';
+                
+                if (gender) url += `gender=${gender}&`;
+                if (nationality) url += `nat=${nationality}&`;
+                url += `results=${results}`;
+
+                // Fetch data
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.results && data.results.length > 0) {
+                    // Display first user if multiple requested
+                    const user = data.results[0];
+                    displayUser(user);
+                    
+                    // Display raw data
+                    const rawDataTextarea = document.getElementById('rawData');
+                    if (format === 'pretty') {
+                        rawDataTextarea.value = JSON.stringify(data, null, 2);
+                    } else {
+                        rawDataTextarea.value = JSON.stringify(data);
+                    }
+
+                    showAlert('User data loaded successfully!', 'success');
+                } else {
+                    throw new Error('No user data received');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert(`Error: ${error.message}`, 'danger');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function displayUser(user) {
+            const { name, email, phone, location, dob, login, nat, gender, picture } = user;
+
+            document.getElementById('userImage').src = picture.large;
+            document.getElementById('userName').textContent = `${name.first} ${name.last}`;
+            document.getElementById('userEmail').textContent = email;
+            document.getElementById('userPhone').textContent = phone;
+            document.getElementById('userLocation').textContent = `${location.city}, ${location.state}, ${location.country}`;
+            document.getElementById('userAge').textContent = dob.age;
+            document.getElementById('userUsername').textContent = login.username;
+            document.getElementById('userNationality').textContent = nat.toUpperCase();
+            document.getElementById('userGender').textContent = gender;
+
+            userProfile.style.display = 'block';
+
+            // Smooth scroll to profile
+            userProfile.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            alertBox.appendChild(alert);
+
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function copyToClipboard() {
+            const textarea = document.getElementById('rawData');
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Show feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

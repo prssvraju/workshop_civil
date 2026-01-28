@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>First Page</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    </head>
+    <body>
+       
+        <div class="d-flex justify-content-center align-items-center vh-100">
+            <div class="card" style="width: 18rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 id ="name" class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                content.</p>
+            <a href="#"  id ="myButton"class="btn btn-primary">Go somewhere</a>
+            <button id="myButton" class="btn btn-success">Click Me</button>
+    
+        </div>
+        </div>
+        </div>
+
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+        <script>
+            document.getElementById('myButton').addEventListener('click', function() {
+            fetch('https://randomuser.me/api/')
+                .then(response => response.json())
+                .then(data => {
+                    const pictureUrl = data.results[0].picture.large;
+                    var name=data.results[0].name.first;
+                    document.getElementById('name').innerText = name;
+                    document.querySelector('.card-img-top').src = pictureUrl;
+                    console.log(data);
+                })
+                .catch(error => console.error('Error:', error));
+                console.log('Button clicked!');
+            });
+        </script>
+    </body>
+</html>
